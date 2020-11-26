@@ -6,15 +6,36 @@
 
 由于我学习的时候已经是增加了hooks了，所以我的学习方式按照有hooks来做时，就没有学习class模式了。class的方式我一直都不怎么习惯，你总是需要自己手动的实现`constructor()`，而且由于他是子类所以你还需要手动实现下`super() `。
 
+在React官方对Hooks的描述中，将Hook分为两种: 基础Hook`useState` ,`useEffect`，`useContext`三个，将其他的内置Hook称作“额外的Hook”如`useCallback`
+
 ### useState	
 
 hooks的state，与原来的方式不同，的调用方式是this.state.xxx(Vue: 这个我熟，我太熟了），setState的时候还需要手动描述格式
 
+### useContext
+
+ 如果想要组件之间共享状态，可以使用`useContext`。
+ React 的 `Context API` 是一种在应用程序中深入传递数据的方法，而无需手动一个一个在多个父子孙之间传递 `prop`。当咱们需要的只是传递数据时，它可以作为像`Redux`这样的工具的一个很好的替代。
+ 使用 `Context` ,首先顶层先声明 `Provier` 组件，并声明 `value`属性，接着在后代组件中声明 `Consumer` 组件，这个 `Consumer`子组件，只能是唯一的一个函数，函数参数即是 `Context` 的负载。如果有多个 `Context` ,`Provider` 和 `Consumer`任意的顺序嵌套即可。
+
+此外我们还可以针对任意一个 `Context` 使用 `contextType` 来简化对这个 `Context` 负载的获取。但在一个组件中，即使消费多个 `Context`,`contextType` 也只能指向其中一个。
+ 在 Hooks 环境中，依旧可以使用 `Consumer`，但是 `ContextType` 作为类静态成员肯定是用不了。Hooks 提供了 `useContext`,不但解决了 Consumer 难用的问题同时也解决了　`contextType` 只能使用一个 `context`的问题。
+
+
+
 ### useRef
 
-与Vue中相似的用法，在React中由于更加轻量级，用的时候要更多一些（其实Vue中也用的也多，所以上文是个废话。。
+与Vue中相似的用法，在React中由于更加轻量级，用的时候要更多一些，（其实Vue中也用的也多，所以上文是个废话)。
 
 
+
+### useMemo
+
+``` jsx
+const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+```
+
+直白的描述是`useMemo`就是React版本`computed`或者`watch`(如果你提供了依赖数组项目，他就是`computed`一样有缓存。如果你提供了空数组，它就会在每次渲染时重新计算) 
 
 ## Class 语法
 
