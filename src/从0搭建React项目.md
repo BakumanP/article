@@ -77,16 +77,35 @@ yarn add typescript -D
 
 #### 配置tsconfig.json
 
+``` powershell
+tsc --init 
+```
 
+会自动创建一个 `tsconfig.json`
 
 ### 安装babel
 
 ``` powershell
 yarn add @babel/core -D
 yarn add  @babel/preset-react @babel/preset-react babel-loader @babel/preset-typescript -D
+yarn add thread-loader -D
 ```
 
 提示: 在babel7之后，配置文件由`.babelrc` 变更为了`babel.config.js`,如过想了解更多区别可以看这个[升级你的babel](https://www.cnblogs.com/Molyp/p/13693718.html) 。
+
+由于babel会自动寻找对应的项目跟目录的`babel.config.js`来进行配置，接下来我们新建 并编写以下代码
+
+``` javascript
+const envConfig = {
+  modules: isTest && 'auto',
+};
+module.exports = {
+	presets: [['@babel/preset-env', envConfig], '@babel/preset-typescript', '@babel/preset-react'], /** 编译预设*/
+	plugins: [], /*  插件，暂时先不配置**/
+}
+```
+
+`plugins` 我们暂时先不配置，等到我们需要时再做处理
 
 ### 安装Webpack
 
@@ -96,7 +115,96 @@ yarn add webpack -D
 
 #### 配置webpack.config.js 
 
-由于webpack会自动寻找对应的`webpack.config.js `文件，所以我们需要先创建此文件
+由于`webpack`也(我为什么要说也)会自动寻找对应的`webpack.config.js `文件，所以我们也需要像上面`babel.config.js`的创建此文件并编辑内容
+
+```javascript
+import { resolve } from 'path';
+import webpack from 'webpack';
+// env
+export const isWindows = process.platform === 'win32';
+const isDev = process.env.NODE_ENV === 'development';
+const isPrd = process.env.NODE_ENV === 'production';
+const deployEnv = process.env.DELOY_ENV || 'prd';
+
+// config
+const additionHash = isPrd ? '.[hash]' : '';
+export const PUBLIC_PATH = `/db/${deployEnv}/`;
+export const BUILD_RESOURCE_NAME = 'resources';
+export default {
+  entry: {
+    app: './src/index.tsx',
+  }, // 入口
+  output: {
+    path: resolve(__dirname, 'build'),
+    publicPath: PUBLIC_PATH,
+    filename: `${BUILD_RESOURCE_NAME}/js/[name]${additionHash}.js`,
+	}, // 产出
+	module: {
+		rules: [
+			{
+        test: /\.[jt]sx?$/,
+        include: resolve(__dirname, 'src'),
+        use: ['thread-loader', 'babel-loader?cacheDirectory=true'],
+			},
+			{
+        test: /\.(jpe?g|png|gif|webp)$/,
+        loader: 'url-loader',
+        options: {
+          limit: 1,
+          name: `${BUILD_RESOURCE_NAME}/images/[hash].[ext]`,
+        },
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|svg)($|\?)/,
+        loader: 'url-loader',
+        options: {
+          limit: 1,
+          size: 16,
+          hash: 'sha512',
+          digest: 'hex',
+          name: `${BUILD_RESOURCE_NAME}/fonts/[hash].[ext]`,
+        },
+      },
+		] //  使用模块 ，注意rules的规则是从下到上执行的
+	}
+}
+
+```
+
+// todo: 添加插件
+
+
+
+#### 继续添加Resolve
+
+Webpack 在启动后会从配置的入口模块出发找出所有依赖的模块，Resolve 配置 Webpack 如何寻找模块所对应的文件。 Webpack 内置 JavaScript 模块化语法解析功能，默认会采用模块化标准里约定好的规则去寻找，但你也可以根据自己的需要修改默认的规则。
+
+``` javascript
+{
+  /** ...前略 */,
+  module: {/** ...略*/},  
+  resolve: {
+    extensions: ['.tsx', '.ts', '.mjs', '.js', '.jsx', '.json'],
+    alias: {
+      '@': resolve(__dirname, './src'),
+    },
+  },  
+}
+```
+
+#### 把打包的生成js文件都丢一起
+
+了解webpack的知道，刚才的配置只是做了一些微小的工作，例如只是将`jsx/tsx`文件翻译成浏览器能看懂的js，但是实际上的js还是没有引入`index.html` 这时候我们的webpack插件就该出马了
+
+``` powershell
+yarn add html-webpack-plugin -D
+```
+
+
+
+#### 把项目运行起来: devServer
+
+
 
 
 
@@ -127,3 +235,10 @@ yarn add webpack -D
 ## 参考链接
 
 - [使用 webpack 搭建 React 项目](https://www.cnblogs.com/jpush88/p/9435277.html)
+- [webpack学习笔记--配置resolve](https://www.cnblogs.com/joyco773/p/9049760.html)
+
+# TODO
+
+- devServer 妹写完，ts的配置没有配 
+
+- cssloader没有设置，可以第一次run起来之后再搞
