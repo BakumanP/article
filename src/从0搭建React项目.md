@@ -73,7 +73,17 @@ yarn add react react-dom
 yarn add typescript -D
 ```
 
+新增@type文件
+
+``` powershell
+yarn add @types/node @types/react @types/react-dom @types/webpack @types/webpack-dev-server @types/webpack-merge -D
+```
+
+
+
 使用ts也不是安装之后就直接OK的，需要配置tsconfig.json
+
+
 
 #### 配置tsconfig.json
 
@@ -87,7 +97,7 @@ tsc --init
 
 ``` powershell
 yarn add @babel/core -D
-yarn add  @babel/preset-react @babel/preset-react babel-loader @babel/preset-typescript -D
+yarn add  @babel/preset-react @babel/preset-react babel-loader @babel/preset-typescript @babel/register @babel/runtime @babel/preset-env @babel/plugin-transform-runtime -D
 yarn add thread-loader -D
 ```
 
@@ -204,6 +214,37 @@ yarn add html-webpack-plugin -D
 
 #### 把项目运行起来: devServer
 
+所有的 plugin 和 loader 已经加载完了（并不，sass，less与各种其他），为了方便我们开发，还需要 webpack 开发服务器，这样我们就可以实时查看代码修改的效果了。
+
+``` powershell
+yarn add  webpack-cli webpack-dev-server -D
+```
+
+接下来将devServer配置到webpack.config.ts
+
+``` typescript
+{
+  /** 前略*/
+  plugin: [ /** 略*/],
+  devServer: {
+    host: 'localhost',
+    port: 3000,
+    open: true
+  }
+}
+```
+
+为了方便运行，可以将 webpack-dev-server 命令添加到 package.json 中：
+
+``` json
+{
+  /** 前略*/
+  "scripts": {
+    "start": "webpack-dev-server",
+  },
+}
+```
+
 
 
 
@@ -239,6 +280,10 @@ yarn add html-webpack-plugin -D
 
 # TODO
 
-- devServer 妹写完，ts的配置没有配 
+- ~~devServer 妹写完，ts的配置没有配~~ 由于webpack-dev-server与webpack5不兼容
+- 分不清楚webpack到底是在哪个环境的我，是真的傻逼，看着module.export都没看明白
+- cssloader没有设置，可以第一次run起来之后再搞s
 
-- cssloader没有设置，可以第一次run起来之后再搞
+*  `@types`系列怎么这么多
+* resolutions在package.json是什么
+* package.json都有什么属性?
