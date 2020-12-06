@@ -4,9 +4,9 @@
 
 大家在刚学习前端新框架的时候，都是使用官方提供的脚手架工具例如 `create-react-app`，但是当自己有特殊的需求时，还需要先eJect，再进行修改，这就显得十分麻烦，而且时间长了也只是会用webpack，遇到情况也只是现查，本文期望通过文章来一步步的搭建一个 React  + Tsx的后端框架，并加上单元测试与mock等功能，也借此机会去了解前端工程化配置的一切，提高自己的水平
 
-## 准备 
+## 前言
 
-所需要的框架包括但不限于: babel react less typeSctipt，工具有 google 必应  
+此次搭建用到框架包括但不限于:  webpack babel react less typeSctipt eslint jest mock  git-cz，还有 google 必应  
 
 ## 起步
 
@@ -37,12 +37,12 @@
 
 ## 引入开发组件
 
-由于我们的目标是使用 React + Tsx
+由于我们的目标是使用 React + tsx，所需要的而tsx在开发过程中都需要添加大量的`@type/***` ，不然你就遇见一堆报错
 
-### 编写第一个组件App.ts/js
+### 编写第一个组件App.tsx
 
 ```tsx
-import react from 'react'
+import React from 'react'
 const App = () => {
   return <> 
        <p>hello,world!</p>
@@ -83,8 +83,6 @@ yarn add @types/node @types/react @types/react-dom @types/webpack @types/webpack
 
 使用ts也不是安装之后就直接OK的，需要配置tsconfig.json
 
-
-
 #### 配置tsconfig.json
 
 ``` powershell
@@ -92,6 +90,50 @@ tsc --init
 ```
 
 会自动创建一个 `tsconfig.json`
+
+配置如下:
+
+``` json
+{
+  "compilerOptions": {
+    /* Basic Options */
+    "target": "es6",
+    "module": "CommonJS",
+    "allowJs": true,
+    "pretty": false,
+    "resolveJsonModule": true,
+    "jsx": "react",
+    "sourceMap": true,
+    "outDir": "./build_src",
+    "strict": true,
+    "noImplicitAny": false,
+    "alwaysStrict": true,
+    "baseUrl": "./",
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "esModuleInterop": true,
+    /* Experimental Options */
+    "experimentalDecorators": true
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "./*.js",
+    "./*.ts",
+    "./src/**/*.js",
+    "./src/**/*.ts",
+    "./src/**/*.tsx"
+  ]
+}
+```
 
 ### 安装babel
 
@@ -106,6 +148,8 @@ yarn add thread-loader -D
 由于babel会自动寻找对应的项目跟目录的`babel.config.js`来进行配置，接下来我们新建 并编写以下代码
 
 ``` javascript
+const isTest = process.env.NODE_ENV === 'test';
+const isDev = process.env.NODE_ENV === 'development';
 const envConfig = {
   modules: isTest && 'auto',
 };
@@ -118,6 +162,8 @@ module.exports = {
 `plugins` 我们暂时先不配置，等到我们需要时再做处理
 
 ### 安装Webpack
+
+警告: 笔者在写这篇文章时遇到了大量的关于webpack5的错误，主要问题在于webpack-dev-server的更新不支持webpack5,所以下文中的 webpack全部都是4.x版本的内容。
 
 ``` powershell
 yarn add webpack -D
@@ -183,8 +229,6 @@ export default {
 
 // todo: 添加插件
 
-
-
 #### 继续添加Resolve
 
 Webpack 在启动后会从配置的入口模块出发找出所有依赖的模块，Resolve 配置 Webpack 如何寻找模块所对应的文件。 Webpack 内置 JavaScript 模块化语法解析功能，默认会采用模块化标准里约定好的规则去寻找，但你也可以根据自己的需要修改默认的规则。
@@ -245,7 +289,17 @@ yarn add  webpack-cli webpack-dev-server -D
 }
 ```
 
+#### 拆分webpack配置文件
 
+实际上，把webpack-dev-server放在webpack.config.ts里面并不合适，因为真正打包的时候并不需要此步配置。所以通常情况下，我们把webpack的配置文件分成三个
+
+
+
+### Jest
+
+
+
+### Mock
 
 
 
@@ -285,5 +339,6 @@ yarn add  webpack-cli webpack-dev-server -D
 - cssloader没有设置，可以第一次run起来之后再搞s
 
 *  `@types`系列怎么这么多
-* resolutions在package.json是什么
-* package.json都有什么属性?
+*  resolutions在package.json是什么
+*  package.json都有什么属性?
+* 
