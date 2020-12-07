@@ -19,7 +19,7 @@
 https://css-tricks.com/old-flexbox-and-new-flexbox/
 <!-- webkit box vs boxflex -->
 https://stackoverflow.com/questions/16653958/webkit-box-vs-boxflex
-<!-- v-cloak 导致的问ti-->787
+<!-- v-cloak 导致的问题-->787
 
  ```
 

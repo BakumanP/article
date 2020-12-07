@@ -295,11 +295,19 @@ yarn add  webpack-cli webpack-dev-server -D
 
 
 
-### Jest
+### eslint
 
 
 
-### Mock
+### prettier
+
+
+
+### jest
+
+
+
+### mock
 
 
 
