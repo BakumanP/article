@@ -31,7 +31,7 @@
 
 最后的结果是这个样子：
 
-![文件初始结构](..\images\从0开始React\初始结构.png "文件初始结构")
+![文件初始结构](https://raw.githubusercontent.com/BakumanP/article/master/images/%E4%BB%8E0%E5%BC%80%E5%A7%8BReact/%E5%88%9D%E5%A7%8B%E7%BB%93%E6%9E%84.png)
 
 不用担心`index.html` 的位置，在webpack下只要还在项目里就行
 
