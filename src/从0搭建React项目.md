@@ -1,12 +1,12 @@
 # 从0搭建React项目
 
-## 开篇
-
-大家在刚学习前端新框架的时候，都是使用官方提供的脚手架工具例如 `create-react-app`，但是当自己有特殊的需求时，还需要先eJect，再进行修改，这就显得十分麻烦，而且时间长了也只是会用webpack，遇到情况也只是现查，本文期望通过文章来一步步的搭建一个 React  + Tsx的后端框架，并加上单元测试与mock等功能，也借此机会去了解前端工程化配置的一切，提高自己的水平
-
 ## 前言
 
-此次搭建用到框架包括但不限于:  webpack babel react less typeSctipt eslint jest mock  git-cz，还有 google 必应  
+此次搭建用到框架包括但不限于:  webpack babel react less typeSctipt eslint jest mock  git-cz，还有 google 必应,[点击我查看对应代码](https://github.com/BakumanP/my-react-app)  
+
+## 开篇
+
+大家在刚学习前端新框架的时候，都是使用官方提供的脚手架工具例如 `create-react-app`。但是当自己有特殊的需求时，还需要先eJect，再进行修改，这就显得十分麻烦，而且时间长了也只是会用webpack，遇到情况也只是现查，对自己的长期发展也不是很好。本文旨在通过文章 + 代码的形式来一步步的搭建一个 React  + Tsx的基础框架，并加上单元测试与mock等功能，也借此机会去了解前端工程化配置的一切，提高笔者自己的水平。
 
 ## 起步
 
@@ -31,7 +31,7 @@
 
 最后的结果是这个样子：
 
-![文件初始结构](https://raw.githubusercontent.com/BakumanP/article/master/images/%E4%BB%8E0%E5%BC%80%E5%A7%8BReact/%E5%88%9D%E5%A7%8B%E7%BB%93%E6%9E%84.png)
+![文件初始结构](https://github.com/BakumanP/article/row/master/images/%E4%BB%8E0%E5%BC%80%E5%A7%8BReact/%E5%88%9D%E5%A7%8B%E7%BB%93%E6%9E%84.png)
 
 不用担心`index.html` 的位置，在webpack下只要还在项目里就行
 
