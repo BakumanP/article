@@ -37,29 +37,29 @@ const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
 
 直白的描述是`useMemo`就是React版本`computed`或者`watch`(如果你提供了依赖数组项目，他就是`computed`一样有缓存。如果你提供了空数组，它就会在每次渲染时重新计算) 
 ### 自定义Hook 
+看了官方提供的这么多Hook，我们也肯定想自己实现一个，下面这个hook是个非常简单的例子 使用了`useEffect`和`useState`来组合
 ```jsx
 import React, {useEffect,useState} from 'react'
 import request from '@/utils/request';
 
 const useFetchSelect = (url) => {
   const [value,setValue] = useState([]);
+    async function getData(){
+      const res = await request(url, {
+ 	method: 'POST'
+      })
+      // 替换为你需要的判断条件
+      if (res.data.length) {
+	setValue(res.data)	
+      }
+  }
 	
-	async function getData(){
-		const res = await request(url, {
-			method: 'POST'
-		})
-		// 替换为你需要的判断条件
-		if (res.data.length) {
-			setValue(res.data)	
-		}
-	}
-	
-	useEffect(() => {
-	 	getData();
-	},[])
-	// 如何在 useEffect中使用 async 
-	// https://q.shanyue.tech/fe/react/236.html
-	return value;
+  useEffect(() => {
+    getData();
+  },[])
+  // 如何在 useEffect中使用 async 
+  // https://q.shanyue.tech/fe/react/236.html
+  return value;
 }
 export default useFetchSelect
 
