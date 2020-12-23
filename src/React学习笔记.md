@@ -37,7 +37,7 @@ const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
 
 直白的描述是`useMemo`就是React版本`computed`或者`watch`(如果你提供了依赖数组项目，他就是`computed`一样有缓存。如果你提供了空数组，它就会在每次渲染时重新计算) 
 ### 自定义Hook 
-看了官方提供的这么多Hook，我们也肯定想自己实现一个，下面这个hook是个非常简单的例子 使用了`useEffect`和`useState`来组合
+看了官方提供的这么多Hook，我们也肯定想自己实现一个，下面这个hook是个非常简单的例子 使用了`useEffect`和`useState`来组合。用来实现远程获取Select的数据。
 ```jsx
 import React, {useEffect,useState} from 'react'
 import request from '@/utils/request';
@@ -65,6 +65,65 @@ export default useFetchSelect
 
 ```
 这里的自定义Hooks有几个问题，第一个就是`useEffect`目前是不支持异步操作，也就是 `useEffect(async () => await xxx,[])`这种不能生效。在React17版本中是支持了异步操作。
+
+第二个问题就是，它目前不支持参数，有那种需要筛选，例如 A关联B，B关联C，(省市区) 又不能做成级联选择的那种
+
+我们需要一个父级标志来获取。于是我们修改代码成下面的样子
+
+``` tsx	
+import {useEffect,useState} from 'react'
+import request from '@/utils/request';
+
+const useFetchSelect = <T>(url: string, queryName?: string, queryValue?: any)  => {
+  const [value,setValue] = useState<T[]>([]);
+	const [query,setQuery] = useState(queryValue);
+	async function getData(){
+		if (query === -99) {
+			return
+		}
+		const data = {};
+		if (queryName) {
+			data[queryName] = query
+		}
+		const res = await request(url, {
+			method: 'GET',
+			params: data,
+			requestType: 'form',
+		})
+		if (res.data?.length) {
+			setValue([...res.data])	
+		}
+	}
+	
+	useEffect(() => {
+	 	getData();
+	},[url,query,queryName])
+	return {value,setQuery};
+}
+export default useFetchSelect
+
+```
+
+这个版本也是有一些问题，相信大家看到了这个 `query === -99`这个操作，这个操作很脏，为了阻止默认就会发送请求占用网络。也许我们可以再增加一个参数用来标志是否立即请求的flag。
+
+返回结果从单独的`value` 变成了 `{value,setQuery}`,多了个切换参数，来触发其他Select的联动。
+
+用法：
+
+``` tsx
+import  useFetchSelect  from '@/utils/hooks';
+
+ // 供应商类型
+ const { value: supplierList } = useFetchSelect<TYPE>('/api/supplier/list');
+  
+  // 数据类型
+ const { value: dataTypeList, setQuery: setSupplierId } = useFetchSelect<TYPE>('/api/data/type/list','supplierId', -99); 
+
+```
+
+
+
+
 
 ## Class 语法
 
