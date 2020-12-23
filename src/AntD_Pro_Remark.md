@@ -12,6 +12,42 @@
 
 看起来像是组件，实际上是组合了查询，新建，列表展示的一体化。你可以配置`HideInFrom`, `HideInSearch` ,`HideInTable` 来调整出现的位置，ProTable的请求的方式为在Request的属性中配置。
 
+
+
+## Form
+
+### 使用ref
+
+``` jsx
+const [formRef] = Form.useForms();
+```
+
+
+
+无论是 `StepForm` 还是 `ProForm` ，都是对`Form`的一个封装。你可以通过这个`formRef`来使用和AntD一样的api
+
+### 清空
+
+ `formRef.resetFields()`是用来清空值的方式，命名方式是和 `FormItem` 的`name` 是一致的
+
+``` js 
+formRef.resetFields('name') // 属性
+
+formRef.resetFields(['obj','name']) // 对象中属性
+
+formRef.resetFields(['objs',0,'name']) // 对象数组中属性
+```
+
+
+
+### Rules
+
+
+
+
+
+
+
 ## 参考链接
 
 * [ProComponents ](https://procomponents.ant.design/components/): ANTD Pro组件开发文档
