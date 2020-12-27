@@ -38,7 +38,7 @@ formRef.resetFields(['obj','name']) // 对象中属性
 formRef.resetFields(['objs',0,'name']) // 对象数组中属性
 ```
 
-
+然后发现上面的方法不好用，改用set undefined
 
 ### Rules
 
