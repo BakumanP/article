@@ -78,8 +78,15 @@ const flat = (arr) => {
 ``` javascript
 // 没写单独的方法
 let arr = [value:1,title:'高中数学'];
-arr.reduce((accumulator,currentValue) => {accumulator[currentValue.value] = currentValue.title; return accumulator },{});
+arr.reduce((accumulator,currentValue) => {
+    accumulator[currentValue.value] = currentValue.title; 
+    return accumulator 
+},{});
 ```
 
 这种方式我认为阴间的点是，reduce 相较于 map之流并不是大家所熟知的 api ，使用这种容易为难你的同事。
+
+参考:
+
+* [MDN上reduce文档](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)
 
