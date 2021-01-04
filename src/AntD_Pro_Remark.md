@@ -40,6 +40,18 @@ formRef.resetFields(['objs',0,'name']) // 对象数组中属性
 
 然后发现上面的方法不好用，改用set undefined
 
+例如：
+
+``` javascript
+ form.setFieldsValue({apiDataSourceInVO: { apiDataTypeId: null, apiDataMediaArr: [], }})
+```
+
+上面的例子是用来对付嵌套的form结构。
+
+如果要设置的类型为TimePiker等，需要将后端转发的string通过moment转化一下。
+
+如果要设置select，要记得触发一次远程调用
+
 ### Rules
 
 
