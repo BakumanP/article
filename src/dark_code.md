@@ -86,6 +86,21 @@ arr.reduce((accumulator,currentValue) => {
 
 这种方式我认为阴间的点是，reduce 相较于 map之流并不是大家所熟知的 api ，使用这种容易为难你的同事。
 
+
+
+## 取出csv文件中文件中的第X列数据是否相同
+
+``` javascript
+// code 前略
+const { result } = file;
+result.split('\r')/* 使用 \r 切换回车切割成一行数组  **/
+	.filter((x,i) => i > 0) /* 去掉第一行数据（列头） **/
+    .map((x,i) => (x.split(','))[0] )/* 取出逗号分割，拿出第一列 **/
+    .every((item,index,array) => (item === array[1] ));/* 判断每一格是否相同（与第一格相同） **/
+```
+
+这行代码其实没有什么参考性，此代码的目的是灵活使用Array提供的方法进行链式调用
+
 参考:
 
 * [MDN上reduce文档](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)
