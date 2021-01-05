@@ -155,7 +155,7 @@ v-for 也是同样的思路，由于jsx本身的灵活，我们不需要这个�
 
 v-show 自己手动控制style或者写一个class
 
-
+slot: 这个实现起来的基本逻辑区别比较大，由于React规定的Props中的属性可以是ReactNode，所以只需要将插槽当props来使用就好，这个地方我觉得确实是Vue赢了一把，vue在多slot的时候会比React有优势
 
 # 使用React去实现Vue中的指令
 
